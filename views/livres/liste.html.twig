@@ -1,0 +1,58 @@
+{% extends "base.html.twig" %}
+
+{% block titre %}
+    Liste des Livres
+{% endblock %}
+
+{% block contenu %}
+    <table class="table text-center" id="tableauLivres">
+                <thead>
+                    <tr class="table-secondary">
+                        <th>Titre</th>
+                        <th>Auteur</th>
+                        <th>Nombre de pages</th>
+                        <th colspan="2">Actions</th>   
+                    </tr>
+                </thead>    
+                
+                <tbody>
+
+                {% for livre in livres %}
+                    <tr>
+                        <td><a href="/livres/{{livre._id}}">{{livre.nom}}</a></td>
+                        <td>{{livre.auteur}}</td>
+                        <td>{{livre.pages}}</td>
+                        <td><a href="" class="btn btn-warning">Modifier</a></td>
+                        <td><a href="" class="btn btn-danger">Supprimer</a></td>
+                    </tr>
+                {% endfor %}    
+
+                </tbody>
+                
+            </table>
+            <button onClick="ajoutFormulaire()" class="btn btn-success w-100">Ajouter</button>
+
+            <form id="ajoutFormulaire" class="d-none" method="POST" action="">
+                <fieldset>
+                    <legend>La création d'un livre</legend>
+                        <div class="form-group">
+                            <label for="titre">Titre du livre</label>
+                            <input type="text" class="form-control" id="titre" name="titre">
+                        </div>
+                        <div class="form-group">
+                            <label for="auteur">Auteur</label>
+                            <input type="text" class="form-control" id="auteur" name="auteur">
+                        </div>
+                        <div class="form-group">
+                            <label for="nbPages">Nombre de pages</label>
+                            <input type="number" class="form-control" id="nbPages" name="nbPages">
+                        </div>
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Valider</button>
+                </fieldset>
+            </form>
+            <script src="/js/main.js"></script>
+{% endblock %}
