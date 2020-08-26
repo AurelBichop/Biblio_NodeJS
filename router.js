@@ -14,7 +14,7 @@ router.get("/livres", (requete, reponse) => {
     livreModel.find()
     .exec()
     .then(livres => {
-        reponse.render("livres/liste.html.twig",{livres : livres});
+        reponse.render("livres/liste.html.twig",{livres : livres, message: reponse.locals.message});
     })
     .catch(error => {
         console.log(error);
@@ -55,6 +55,20 @@ router.get("/livres/:id", (requete, reponse) => {
     //reponse.render("livres/show.html.twig",{});
 })
 
+router.post("/livres/delete/:id", (requete, reponse) => {
+    livreModel.remove({_id:requete.params.id})
+    .exec()
+    .then(resultat => {
+        requete.session.message = {
+            type : 'success',
+            contenu : 'Supression de ce livre'
+        }
+        reponse.redirect("/livres");
+    })
+    .catch(error => {
+        console.log(error);
+    })
+});
 
 router.use((requete,reponse, suite)=>{
     const error = new Error("Page Non trouvée");

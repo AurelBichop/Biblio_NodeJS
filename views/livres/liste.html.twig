@@ -5,6 +5,13 @@
 {% endblock %}
 
 {% block contenu %}
+
+{% if message|length >0 %}
+    <div class="alert alert-{{message.type}}" role="alert">
+        {{message.contenu}}
+    </div>
+{% endif %}
+
     <table class="table text-center" id="tableauLivres">
                 <thead>
                     <tr class="table-secondary">
@@ -23,7 +30,11 @@
                         <td>{{livre.auteur}}</td>
                         <td>{{livre.pages}}</td>
                         <td><a href="" class="btn btn-warning">Modifier</a></td>
-                        <td><a href="" class="btn btn-danger">Supprimer</a></td>
+                        <td>
+                            <form method="POST" action="/livres/delete/{{livre._id}}" onSubmit="return confirm('Voulez-vous vraiment supprimer le livre ?');">
+                                <button class="btn btn-danger" type="submit">supprimer</button>
+                            </form>
+                        </td>
                     </tr>
                 {% endfor %}    
 
