@@ -1,43 +1,8 @@
-let express = require("express");
-let router = express.Router();
-const twig = require("twig");
-const livreModel = require("./models/livre.modele");
 const mongoose = require("mongoose");
-const multer = require("multer");
+const livreModel = require("../models/livre.modele");
 const fs = require("fs");
 
-const storage = multer.diskStorage({
-  destination : (requete, file, cb) => {
-    cb(null, "./public/images/");
-  },
-  filename : (requete, file, cb) => {
-    var date = new Date().toDateString();  
-    cb(null, date+"-"+Math.round(Math.random() * 1000)+"-"+file.originalname);
-  }
-})
-
-const fileFilter = (requete, file, cb) => {
-  if(file.mimetype === "image/jpeg" || file.mimetype === "image/png"){
-    cb(null, true);
-  }else{
-    cb(new Error("l'image n'est pas accepté"),false);
-  }
-}
-
-const upload = multer({
-  storage: storage,
-  limits: {
-      fileSize : 1024 * 1024 * 5
-  },
-  fileFilter : fileFilter
-});
-
-router.get("/", (requete, reponse) => {
-    console.log("Page d'accueil GET sur /");
-    reponse.render("accueil.html.twig");
-})
-
-router.get("/livres", (requete, reponse) => {
+exports.livres_affichage = (requete, reponse) => {
     livreModel.find()
     .exec()
     .then(livres => {
@@ -47,10 +12,9 @@ router.get("/livres", (requete, reponse) => {
         console.log(error);
     });
     
-})
+}
 
-//Ajout d'un Livre
-router.post("/livres", upload.single("image"), (requete, reponse) => {
+exports.livre_ajout = (requete, reponse) => {
     livre = new livreModel({
         _id : new mongoose.Types.ObjectId(),
         nom : requete.body.titre,
@@ -67,10 +31,9 @@ router.post("/livres", upload.single("image"), (requete, reponse) => {
     .catch(error =>{
         console.log(error);
     })
-})
+}
 
-//Affichage d'un livre
-router.get("/livres/:id", (requete, reponse) => {
+exports.livre_show = (requete, reponse) => {
     //console.log(requete.params.id);
     livreModel.findById(requete.params.id)
     .exec()
@@ -81,10 +44,9 @@ router.get("/livres/:id", (requete, reponse) => {
         console.log(error);
     });
     //reponse.render("livres/show.html.twig",{});
-})
+}
 
-//Modification d'un livre 
-router.get("/livres/modification/:id", (requete, reponse) =>{
+exports.livre_modification = (requete, reponse) =>{
     //console.log(requete.params.id);
     livreModel.findById(requete.params.id)
     .exec()
@@ -94,9 +56,9 @@ router.get("/livres/modification/:id", (requete, reponse) =>{
     .catch(error => {
         console.log(error);
     });
-});
+}
 
-router.post("/livres/updateImage", upload.single("image"), (requete, reponse) => {
+exports.livre_update_image = (requete, reponse) => {
     var livre = livreModel.findById(requete.body.identifiant)
     .select("image")
     .exec()
@@ -119,9 +81,9 @@ router.post("/livres/updateImage", upload.single("image"), (requete, reponse) =>
     .catch(error => {
         console.log(error);
     });
-})
+}
 
-router.post("/livres/modificationServer", (requete, reponse) => {
+exports.livre_update = (requete, reponse) => {
     const livreUpdate = {
         nom : requete.body.titre,
         auteur: requete.body.auteur,
@@ -149,10 +111,9 @@ router.post("/livres/modificationServer", (requete, reponse) => {
         }
         reponse.redirect("/livres");
     })
-})
+}
 
-
-router.post("/livres/delete/:id", (requete, reponse) => {
+exports.livre_delete = (requete, reponse) => {
     var livre = livreModel.findById(requete.params.id)
     .select("image")
     .exec()
@@ -178,17 +139,4 @@ router.post("/livres/delete/:id", (requete, reponse) => {
     .catch(error => {
         console.log(error);
     })
-});
-
-router.use((requete,reponse, suite)=>{
-    const error = new Error("Page Non trouvée");
-    error.status = 404;
-    suite(error);
-})
-
-router.use((error,requete,reponse)=>{
-    reponse.status(error.status || 500);
-    reponse.end(error.message);
-})
-
-module.exports = router;
+}

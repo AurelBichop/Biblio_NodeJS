@@ -1,7 +1,8 @@
 const express = require("express");
 const server = express();
 const morgan = require("morgan");
-const router = require("./router");
+const routerLivre = require("./routeurs/livres.routeur");
+const routerGlobal = require("./routeurs/global.routeur");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const session = require("express-session");
@@ -30,7 +31,8 @@ server.use((requete,reponse,suite) => {
     suite();
 });
 
-server.use("/", router);
+server.use("/", routerLivre);
+server.use("/", routerGlobal);
 
 
 server.listen(8080);
