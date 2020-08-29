@@ -6,6 +6,7 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const session = require("express-session");
 
+
 server.set('trust proxy', 1) // trust first proxy
 server.use(session({
   secret: 'keyboard cat',
