@@ -30,16 +30,16 @@ const upload = multer({
   fileFilter : fileFilter
 });
 
-router.get("/livres", livreController.livres_affichage)
+router.get("/", livreController.livres_affichage)
 //Ajout d'un Livre
-router.post("/livres", upload.single("image"), livreController.livre_ajout)
+router.post("/", upload.single("image"), livreController.livre_ajout)
 //Affichage d'un livre
-router.get("/livres/:id", livreController.livre_show)
+router.get("/:id", livreController.livre_show)
 //Modification d'un livre 
-router.get("/livres/modification/:id", livreController.livre_modification);
-router.post("/livres/updateImage", upload.single("image"), livreController.livre_update_image)
-router.post("/livres/modificationServer", livreController.livre_update)
-router.post("/livres/delete/:id", livreController.livre_delete);
+router.get("/modification/:id", livreController.livre_modification);
+router.post("/updateImage", upload.single("image"), livreController.livre_update_image)
+router.post("/modificationServer", livreController.livre_update)
+router.post("/delete/:id", livreController.livre_delete);
 
 
 
