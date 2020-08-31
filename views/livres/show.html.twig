@@ -15,10 +15,18 @@
                             <label for="titre">Titre du livre</label>
                             <input type="text" class="form-control" id="titre" name="titre" value={{livre.nom}}>
                         </div>
-                        <div class="form-group">
                             <label for="auteur">Auteur</label>
-                            <input type="text" class="form-control" id="auteur" name="auteur" value={{livre.auteur}}>
-                        </div>
+                            <select class="form-control" id="auteur" name="auteur">
+                                {% for auteur in auteurs %}
+                                    <option value="{{auteur.id}}" 
+                                    {% if auteur.id == livre.auteur._id %}
+                                        selected
+                                    {% endif %}
+                                    >
+                                    {{auteur.nom}} {{auteur.prenom}}
+                                    </option>
+                                {% endfor %}
+                            </select>
                         <div class="form-group">
                             <label for="nbPages">Nombre de pages</label>
                             <input type="number" class="form-control" id="nbPages" name="nbPages" value={{livre.pages}}>

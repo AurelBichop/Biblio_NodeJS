@@ -2,6 +2,8 @@ const mongoose = require("mongoose");
 const livreModel = require("../models/livre.modele");
 const auteurModel = require("../models/auteur.modele")
 const fs = require("fs");
+const auteurModele = require("../models/auteur.modele");
+const { exec } = require("child_process");
 
 exports.livres_affichage = (requete, reponse) => {
     auteurModel.find()
@@ -59,15 +61,24 @@ exports.livre_show = (requete, reponse) => {
 }
 
 exports.livre_modification = (requete, reponse) =>{
-    //console.log(requete.params.id);
-    livreModel.findById(requete.params.id)
+    auteurModele.find()
     .exec()
-    .then(livre => {
-        reponse.render("livres/show.html.twig", {livre:livre, isModification:true})
+    .then(auteurs => {
+        //console.log(requete.params.id);
+        livreModel.findById(requete.params.id)
+        .populate("auteur")
+        .exec()
+        .then(livre => {
+            reponse.render("livres/show.html.twig", {auteurs:auteurs, livre:livre, isModification:true})
+        })
+        .catch(error => {
+            console.log(error);
+        });
     })
     .catch(error => {
         console.log(error);
     });
+    
 }
 
 exports.livre_update_image = (requete, reponse) => {

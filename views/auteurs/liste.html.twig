@@ -1,0 +1,71 @@
+{% extends "base.html.twig" %}
+
+{% block titre %}
+    Liste des Auteurs
+{% endblock %}
+
+{% block contenu %}
+
+{% if message|length >0 %}
+    <div class="alert alert-{{message.type}}" role="alert">
+        {{message.contenu}}
+    </div>
+{% endif %}
+
+    <table class="table text-center" id="tableauLivres">
+                <thead>
+                    <tr class="table-secondary">
+                        <th>nom</th>
+                        <th>prenom</th>
+                        <th>Nombre de Livres</th>
+                        <th colspan="2">Actions</th>   
+                    </tr>
+                </thead>    
+                
+                <tbody>
+
+                {% for auteur in auteurs %}
+                    <tr>
+                        <td class="align-middle"><a href="/auteurs/{{auteur._id}}">{{auteur.nom}}</a></td>
+                        <td class="align-middle"><a href="/auteurs/{{auteur._id}}">{{auteur.prenom}}</a></td>
+                        <td class="align-middle">{{auteur.livres|length }}</td>
+                        <td class="align-middle"><a href="/auteurs/modification/{{auteur._id}}" class="btn btn-warning">Modifier</a></td>
+                        <td class="align-middle">
+                            <form method="POST" action="/auteurs/delete/{{auteur._id}}" onSubmit="return confirm('Voulez-vous vraiment supprimer cette Auteur ?');">
+                                <button class="btn btn-danger" type="submit">supprimer</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}    
+
+                </tbody>
+                
+            </table>
+
+                        <button onClick="ajoutFormulaireAuteur()" class="btn btn-success w-100">Ajouter</button>
+
+            <form id="ajoutFormulaireAuteur" class="d-none" method="POST" action="">
+                <fieldset>
+                    <legend>Ajout d'un auteur</legend>
+                        <div class="form-group">
+                            <label for="nom">Nom</label>
+                            <input type="text" class="form-control" id="nom" name="nom">
+                        </div>
+                        <div class="form-group">
+                            <label for="prenom">prenom</label>
+                            <input type="text" class="form-control" id="prenom" name="prenom">
+                        
+                        </div>
+                        <div class="form-group">
+                            <label for="age">age</label>
+                            <input type="number" class="form-control" id="age" name="age">
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="sexe" name="sexe">
+                            <label class="form-check-label" for="sexe">Homme</label>
+                        </div>   
+                        <button type="submit" class="btn btn-primary">Valider</button>
+                </fieldset>
+            </form>
+            <script src="/js/main.js"></script>
+{% endblock %}
